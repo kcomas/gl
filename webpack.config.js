@@ -13,10 +13,17 @@ const config = {
                 exclude: /node_modules/,
             },
             {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+            {
                 test: /\.(glsl|vs|fs)$/,
                 loader: "ts-shader-loader",
             },
         ],
+    },
+    resolve: {
+        extensions: [".tsx", ".ts", ".js"],
     },
     plugins: [new HtmlWebpackPlugin()],
     output: {
