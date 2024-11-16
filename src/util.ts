@@ -43,7 +43,7 @@ export function createProgram(
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
     const success = gl.getProgramParameter(program, gl.LINK_STATUS);
-    if (success) return success;
+    if (success) return program;
     console.log(gl.getProgramInfoLog(program));
     gl.deleteProgram(program);
     throw new Error("failed to link program");
