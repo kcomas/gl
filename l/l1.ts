@@ -19,7 +19,7 @@ function main() {
         gl.FRAGMENT_SHADER,
         fragmentShaderSource
     );
-    const program = createProgram(gl, [vertexShader, fragmentShader]);
+    const program = createProgram(gl, vertexShader, fragmentShader);
     const positionAttributeLocation = gl.getAttribLocation(
         program,
         "a_position"
