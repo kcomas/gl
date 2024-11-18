@@ -3,6 +3,8 @@ import {
     setCanvasToScreenSize,
     createShader,
     createProgram,
+    randomInt,
+    setRectangle,
 } from "./util";
 import "./index.css";
 import vertexShaderSource from "./shaders/vertexShader.glsl";
@@ -28,10 +30,9 @@ function main() {
         program,
         "u_resolution"
     );
+    const colorLocation = gl.getUniformLocation(program, "u_color");
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    const positions = [10, 20, 80, 20, 10, 30, 10, 30, 80, 20, 80, 30];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
     const vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
     gl.enableVertexAttribArray(positionAttributeLocation);
@@ -50,14 +51,31 @@ function main() {
     );
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.useProgram(program);
-    gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
     gl.bindVertexArray(vao);
-    const primitiveType = gl.TRIANGLES;
-    offset = 0;
-    let count = 6;
-    gl.drawArrays(primitiveType, offset, count);
+    gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
+    for (let i = 0; i < 50; i++) {
+        const minX = Math.floor(canvas.width / 8);
+        const minY = Math.floor(canvas.height / 8);
+        const maxX = Math.floor(canvas.width / 4);
+        const maxY = Math.floor(canvas.height / 4);
+        setRectangle(
+            gl,
+            randomInt(0, canvas.width),
+            randomInt(0, canvas.height),
+            randomInt(minX, maxX),
+            randomInt(minY, maxY)
+        );
+        gl.uniform4f(
+            colorLocation,
+            Math.random(),
+            Math.random(),
+            Math.random(),
+            1
+        );
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
 }
 
 window.addEventListener("resize", main);
